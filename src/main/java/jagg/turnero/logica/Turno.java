@@ -1,6 +1,7 @@
 package jagg.turnero.logica;
 
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Turno {
+public class Turno implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

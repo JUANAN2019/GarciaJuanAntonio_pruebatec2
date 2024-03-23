@@ -28,7 +28,7 @@ public class Ciudadano implements Serializable {
     private String email;
     private String telefono;
     
-    @OneToMany(mappedBy = "turno")
+    @OneToMany(mappedBy = "ciudadano")
     private List<Turno> turnos;
 
     public Ciudadano() {

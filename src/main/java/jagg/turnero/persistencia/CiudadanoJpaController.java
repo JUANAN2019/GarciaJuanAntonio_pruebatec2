@@ -8,10 +8,7 @@ import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -20,6 +17,9 @@ import javax.persistence.criteria.Root;
  * @author JUNAN
  */
 public class CiudadanoJpaController implements Serializable {
+    public CiudadanoJpaController(){
+        emf = Persistence.createEntityManagerFactory("turneroUP");
+    }
 
     public CiudadanoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
