@@ -12,7 +12,10 @@ public class Controladora  {
 
     ControladoraPersistencia controlPersis = new ControladoraPersistencia();
 
-    public void crearTurno (Turno turno) {
+    public void crearTurno (Turno turno, Long idCiudadano) {
+
+        Ciudadano ciudadano = controlPersis.obtenerCiudadano(idCiudadano);
+        turno.setCiudadano(ciudadano);
         controlPersis.crearTurno(turno);
     }
 

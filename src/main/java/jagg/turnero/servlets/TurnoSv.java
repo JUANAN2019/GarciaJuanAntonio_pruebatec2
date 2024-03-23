@@ -4,8 +4,17 @@
  */
 package jagg.turnero.servlets;
 
+import com.google.protobuf.TextFormat;
+import jagg.turnero.logica.Ciudadano;
+import jagg.turnero.logica.Controladora;
+import jagg.turnero.logica.Turno;
+import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,55 +39,39 @@ public class TurnoSv extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet TurnoSv</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet TurnoSv at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        Controladora control = new Controladora();
+        LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
+        String tramite = request.getParameter("tramite");
+        String  id = request.getParameter("id");
+        try{
+            Turno turno = new Turno();
+            turno.setFecha(fecha);
+            turno.setTramite(tramite);
+            control.crearTurno(turno, Long.parseLong(id));
+
+            request.getRequestDispatcher("index.jsp").forward(request,response);
+        }catch (TextFormat.ParseException ex){
+            Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";

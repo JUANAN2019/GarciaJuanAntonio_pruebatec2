@@ -55,16 +55,18 @@
                         <option value="otros">Otros tramites</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre">
+                <div>
+                    <label for="date">Fecha:</label>
+                    <input type="date" class="form-control" id="fecha" name="fecha">
                 </div>
-                <div class="form-group">
-                    <label for="ciudad">Ciudad:</label>
-                    <input type="text" class="form-control" id="ciudad" name="ciudad">
+                <div>
+                    <label for="ciudadanoId">Ciudadano ID:</label>
+                    <input type="text" class="form-control" id="fecha" name="id">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
 
             <br>
@@ -78,7 +80,7 @@
             <br>
             <br>
             <!-- Resultados en tabla -->
-          
+
 
             <!-- Scripts de Bootstrap -->
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

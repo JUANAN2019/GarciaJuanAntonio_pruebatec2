@@ -19,19 +19,28 @@ public class Turno implements Serializable {
     private LocalDate fecha;
     private String tramite;
     private boolean estadoTramite;
-    
+
+
     @ManyToOne
     @JoinColumn(name = "ciudadano_id")
     private Ciudadano ciudadano;
     public Turno() {
     }
 
-    public Turno(LocalDate fecha, String tramite, boolean estadoTramite, Ciudadano ciudadano) {
+//    public Turno(LocalDate fecha, String tramite,  Ciudadano ciudadano) {
+//        this.fecha = fecha;
+//        this.tramite = tramite;
+//        this.estadoTramite = false;
+//        this.ciudadano = ciudadano;
+//    }
+    public Turno(LocalDate fecha, String tramite, Ciudadano ciudadano) {
         this.fecha = fecha;
         this.tramite = tramite;
-        this.estadoTramite = estadoTramite;
+        this.estadoTramite = false;
         this.ciudadano = ciudadano;
+        ;
     }
+
 
     public long getId() {
         return id;
