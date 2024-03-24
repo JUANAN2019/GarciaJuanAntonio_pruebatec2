@@ -27,12 +27,6 @@ public class Turno implements Serializable {
     public Turno() {
     }
 
-//    public Turno(LocalDate fecha, String tramite,  Ciudadano ciudadano) {
-//        this.fecha = fecha;
-//        this.tramite = tramite;
-//        this.estadoTramite = false;
-//        this.ciudadano = ciudadano;
-//    }
     public Turno(LocalDate fecha, String tramite, Ciudadano ciudadano) {
         this.fecha = fecha;
         this.tramite = tramite;

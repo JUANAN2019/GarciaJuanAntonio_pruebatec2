@@ -6,11 +6,15 @@ package jagg.turnero.persistencia;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Turno;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
+
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -140,7 +144,46 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
+    private List<Turno> findTurnoEntitiesFecha(boolean all, int maxResults, int firstResult, LocalDate fecha) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Turno.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    private List<Turno> findTurnoEntitiesF(boolean all, int maxResults, int firstResult, LocalDate fecha) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Turno> cq = cb.createQuery(Turno.class);
+            Root<Turno> turno = cq.from(Turno.class);
 
+            Predicate predicate = cb.conjunction();
+            if (!all) {
+                predicate = cb.and(predicate, cb.equal(turno.get("fecha"), fecha));
+            }
+
+            cq.where(predicate);
+            Query q = em.createQuery(cq);
+
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
     public Turno findTurno(long id) {
         EntityManager em = getEntityManager();
         try {

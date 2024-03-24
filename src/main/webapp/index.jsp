@@ -60,7 +60,7 @@
                     <input type="date" class="form-control" id="fecha" name="fecha">
                 </div>
                 <div>
-                    <label for="ciudadanoId">Ciudadano ID:</label>
+                    <label for="id">Ciudadano ID:</label>
                     <input type="text" class="form-control" id="fecha" name="id">
                 </div>
                 <div>
@@ -71,16 +71,54 @@
 
             <br>
 
-            <h2>Mostrar equipos</h2>
-            <form action="EquipoSv" method="GET">
+            <h2>Visualizar turnos</h2>
+            <form action="TurnoSv" method="GET">
+                <div>
+                    <label for="date">Fecha:</label>
+                    <input type="date" class="form-control" id="fecha" name="fecha">
+                </div>
+                <div>
+                    <label for="id">Ciudadano ID:</label>
+                    <input type="text" class="form-control" id="fecha" name="id">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Mostrar</button>
+                </div>
 
-                <button type="submit" class="btn btn-primary">Mostrar</button>
             </form>
 
             <br>
             <br>
             <!-- Resultados en tabla -->
+            <div class="results-table">
+                <% if (request.getAttribute("turnos") != null) { %>
+                <h3>Turnos</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha:</th>
+                            <th>Ciudadano Nombre</th>
+                            <th>Ciudadano Id</th>
+                            <th>Tramite</th>
+                            <th>Estado tramite</th>
 
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <% for (Turno turno : (List<Turno>) request.getAttribute("turnos")) {%>
+                        <tr>
+                            <td><%= turno.getFecha()%></td>
+                            <td><%= turno.getCiudadano().getNombre()%></td>
+                            <td><%= turno.getCiudadano().getId()%></td>
+                            <td><%= turno.getTramite()%></td>
+                            <td><%= turno.isEstadoTramite()%></td>
+
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <% }%>
+            </div>
 
             <!-- Scripts de Bootstrap -->
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

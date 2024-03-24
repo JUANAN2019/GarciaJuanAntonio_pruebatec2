@@ -13,6 +13,7 @@ import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -28,15 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "TurnoSv", urlPatterns = {"/TurnoSv"})
 public class TurnoSv extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    Controladora control = new Controladora();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -46,7 +39,9 @@ public class TurnoSv extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        List<Turno> listaTurnos = control.traerTurnos();
+        request.setAttribute("turnos", listaTurnos);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
 
@@ -54,7 +49,7 @@ public class TurnoSv extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Controladora control = new Controladora();
+        
         LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
         String tramite = request.getParameter("tramite");
         String  id = request.getParameter("id");
