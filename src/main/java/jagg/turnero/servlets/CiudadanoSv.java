@@ -8,6 +8,9 @@ import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Controladora;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "CiudadanoSv", urlPatterns = {"/CiudadanoSv"})
 public class CiudadanoSv extends HttpServlet {
-
+    private List<Ciudadano> listaCiudadanos = new ArrayList<>();
    private Controladora control = new Controladora();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -45,7 +48,16 @@ public class CiudadanoSv extends HttpServlet {
        String dni = request.getParameter("dni");
        String telefono = request.getParameter("telefono");
        String email = request.getParameter("email");
-       control.crearCiudadano(new Ciudadano(nombre, apellidos, dni, telefono, email));
+       
+       Ciudadano ciudadano = new Ciudadano();
+       ciudadano.setNombre(nombre);
+       ciudadano.setApellidos(apellidos);
+       ciudadano.setDni(dni);
+       ciudadano.setTelefono(telefono);
+       ciudadano.setEmail(email);
+       listaCiudadanos.add(ciudadano);
+
+       control.crearCiudadano(ciudadano);
 
 
        response.sendRedirect("index.jsp");

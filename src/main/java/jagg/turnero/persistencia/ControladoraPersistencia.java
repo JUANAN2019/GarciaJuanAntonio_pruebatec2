@@ -4,6 +4,7 @@ import jagg.turnero.logica.Turno;
 import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,11 @@ public class ControladoraPersistencia {
 
     public List<Turno> traerTurnos () {
         return turnoJPA.findTurnoEntities();
+    }
+    public List<Turno> traerTurnosFecha (LocalDate fecha) {
+         return turnoJPA.buscarTurnosFecha(fecha);
+        
+
     }
 
     public void editarTurno (Turno turno) {

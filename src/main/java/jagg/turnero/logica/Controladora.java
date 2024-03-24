@@ -4,6 +4,7 @@ import jagg.turnero.persistencia.ControladoraPersistencia;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +26,9 @@ public class Controladora  {
 
     public List<Turno> traerTurnos () {
         return controlPersis.traerTurnos();
+    }
+    public List<Turno> traerTurnosFecha (LocalDate fecha) {
+        return controlPersis.traerTurnosFecha(fecha);
     }
 
     public void editarTurno (Turno turno) {

@@ -15,7 +15,11 @@ import jagg.turnero.logica.Turno;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -124,6 +128,9 @@ public class TurnoJpaController implements Serializable {
     public List<Turno> findTurnoEntities() {
         return findTurnoEntities(true, -1, -1);
     }
+    public List<Turno> findTurnoEntitiesFecha(LocalDate fecha) {
+        return buscarTurnosFecha( fecha);
+    }
 
     public List<Turno> findTurnoEntities(int maxResults, int firstResult) {
         return findTurnoEntities(false, maxResults, firstResult);
@@ -144,7 +151,7 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
-    private List<Turno> findTurnoEntitiesFecha(boolean all, int maxResults, int firstResult, LocalDate fecha) {
+    private List<Turno> findTurnoEntities(boolean all, int maxResults, int firstResult, LocalDate fecha) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -159,31 +166,17 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
-    private List<Turno> findTurnoEntitiesF(boolean all, int maxResults, int firstResult, LocalDate fecha) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Turno> cq = cb.createQuery(Turno.class);
-            Root<Turno> turno = cq.from(Turno.class);
-
-            Predicate predicate = cb.conjunction();
-            if (!all) {
-                predicate = cb.and(predicate, cb.equal(turno.get("fecha"), fecha));
-            }
-
-            cq.where(predicate);
-            Query q = em.createQuery(cq);
-
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
+    
+    private List<Turno> buscarTurnosFecha(LocalDate fecha) {
+        
+        List<Turno> listaTurnos = findTurnoEntities();
+        //Filtra por fecha
+        List<Turno> turnosPorFecha = listaTurnos.stream()
+                .filter(t -> t.getFecha().equals(fecha) )
+                .collect(Collectors.toList());
+        return turnosPorFecha;
+        
+    }    
     public Turno findTurno(long id) {
         EntityManager em = getEntityManager();
         try {

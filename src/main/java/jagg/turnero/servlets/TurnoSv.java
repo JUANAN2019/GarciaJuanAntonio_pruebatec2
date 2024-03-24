@@ -39,7 +39,9 @@ public class TurnoSv extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Turno> listaTurnos = control.traerTurnos();
+        LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
+        System.out.println("soy la fecha "+fecha);
+        List<Turno> listaTurnos = control.traerTurnosFecha(fecha);
         request.setAttribute("turnos", listaTurnos);
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
