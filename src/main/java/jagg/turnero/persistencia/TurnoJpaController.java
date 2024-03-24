@@ -16,6 +16,7 @@ import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -166,13 +167,43 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
+    // public List<Turno> findTurnoEntitiesFecha(boolean all, int maxResults, int firstResult, LocalDate fecha) {
+    //     EntityManager em = getEntityManager();
+    //     try {
+    //         CriteriaBuilder cb = em.getCriteriaBuilder();
+    //         CriteriaQuery<Turno> cq = cb.createQuery(Turno.class);
+    //         Root<Turno> turno = cq.from(Turno.class);
     
-    private List<Turno> buscarTurnosFecha(LocalDate fecha) {
+    //         Predicate predicate = null; // Inicializar predicate como null
+    
+    //         if (!all) {
+    //             predicate = cb.equal(turno.get("fecha"), fecha); // Crear predicate solo si no es all
+    //         }
+    
+    //         // Establecer la cláusula where basada en el predicate (podría ser null)
+    //         cq.where(predicate);
+    
+    //         Query q = em.createQuery(cq);
+    
+    //         if (!all) {
+    //             q.setMaxResults(maxResults);
+    //             q.setFirstResult(firstResult);
+    //         }
+    
+    //         return q.getResultList();
+    //     } finally {
+    //         if (em.isOpen()) {
+    //             em.close();
+    //         }
+    //     }
+    // } 
+    public List<Turno> buscarTurnosFecha(LocalDate fecha) {
         
         List<Turno> listaTurnos = findTurnoEntities();
         //Filtra por fecha
         List<Turno> turnosPorFecha = listaTurnos.stream()
                 .filter(t -> t.getFecha().equals(fecha) )
+                .sorted(Comparator.comparing(Turno::isEstadoTramite))
                 .collect(Collectors.toList());
         return turnosPorFecha;
         
