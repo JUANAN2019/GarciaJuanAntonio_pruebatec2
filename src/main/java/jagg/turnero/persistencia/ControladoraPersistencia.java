@@ -30,7 +30,7 @@ public class ControladoraPersistencia {
         return turnoJPA.findTurnoEntities();
     }
     public List<Turno> traerTurnosFecha (LocalDate fecha) {
-         return turnoJPA.buscarTurnosFecha(fecha);
+         return turnoJPA.findTurnoEntitiesFecha(fecha);
         
 
     }

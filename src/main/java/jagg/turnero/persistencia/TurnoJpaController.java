@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -27,12 +28,15 @@ import java.util.stream.Collectors;
  * @author JUNAN
  */
 public class TurnoJpaController implements Serializable {
-    public TurnoJpaController(){
+
+    public TurnoJpaController() {
         emf = Persistence.createEntityManagerFactory("turneroUP");
     }
+
     public TurnoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -129,8 +133,9 @@ public class TurnoJpaController implements Serializable {
     public List<Turno> findTurnoEntities() {
         return findTurnoEntities(true, -1, -1);
     }
+
     public List<Turno> findTurnoEntitiesFecha(LocalDate fecha) {
-        return buscarTurnosFecha( fecha);
+        return buscarTurnosFecha(fecha);
     }
 
     public List<Turno> findTurnoEntities(int maxResults, int firstResult) {
@@ -152,6 +157,7 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
+
     private List<Turno> findTurnoEntities(boolean all, int maxResults, int firstResult, LocalDate fecha) {
         EntityManager em = getEntityManager();
         try {
@@ -167,47 +173,21 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
-    // public List<Turno> findTurnoEntitiesFecha(boolean all, int maxResults, int firstResult, LocalDate fecha) {
-    //     EntityManager em = getEntityManager();
-    //     try {
-    //         CriteriaBuilder cb = em.getCriteriaBuilder();
-    //         CriteriaQuery<Turno> cq = cb.createQuery(Turno.class);
-    //         Root<Turno> turno = cq.from(Turno.class);
-    
-    //         Predicate predicate = null; // Inicializar predicate como null
-    
-    //         if (!all) {
-    //             predicate = cb.equal(turno.get("fecha"), fecha); // Crear predicate solo si no es all
-    //         }
-    
-    //         // Establecer la cláusula where basada en el predicate (podría ser null)
-    //         cq.where(predicate);
-    
-    //         Query q = em.createQuery(cq);
-    
-    //         if (!all) {
-    //             q.setMaxResults(maxResults);
-    //             q.setFirstResult(firstResult);
-    //         }
-    
-    //         return q.getResultList();
-    //     } finally {
-    //         if (em.isOpen()) {
-    //             em.close();
-    //         }
-    //     }
-    // } 
-    public List<Turno> buscarTurnosFecha(LocalDate fecha) {
-        
+
+    // Metodo que filtra por fecha y ordenando por estados
+    private List<Turno> buscarTurnosFecha(LocalDate fecha) {
+
         List<Turno> listaTurnos = findTurnoEntities();
         //Filtra por fecha
         List<Turno> turnosPorFecha = listaTurnos.stream()
-                .filter(t -> t.getFecha().equals(fecha) )
+                .filter(t -> t.getFecha().equals(fecha))
                 .sorted(Comparator.comparing(Turno::isEstadoTramite))
                 .collect(Collectors.toList());
         return turnosPorFecha;
-        
-    }    
+
+    }
+    
+  
     public Turno findTurno(long id) {
         EntityManager em = getEntityManager();
         try {
@@ -229,5 +209,5 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

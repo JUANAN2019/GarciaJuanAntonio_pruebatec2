@@ -96,6 +96,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Turno ID:</th>
                             <th>Fecha:</th>
                             <th>Ciudadano Nombre</th>
                             <th>Ciudadano Id</th>
@@ -107,11 +108,12 @@
                     <tbody>
                          <% for (Turno turno : (List<Turno>) request.getAttribute("turnos")) {%>
                         <tr>
+                            <td><%= turno.getId()%></td>
                             <td><%= turno.getFecha()%></td>
                             <td><%= turno.getCiudadano().getNombre()%></td>
                             <td><%= turno.getCiudadano().getId()%></td>
                             <td><%= turno.getTramite()%></td>
-                            <td><%= turno.isEstadoTramite()%></td>
+                            <td><%= turno.isEstadoTramite() ? "Atendido" : "En espera"%></td>
 
                         </tr>
                         <% } %>
