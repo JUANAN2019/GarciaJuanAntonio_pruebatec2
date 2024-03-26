@@ -31,8 +31,8 @@ public class ControladoraPersistencia {
     public List<Turno> traerTurnos () {
         return turnoJPA.findTurnoEntities();
     }
-    public List<Turno> traerTurnosFecha (LocalDate fecha, Boolean estadoTramite) {
-         return turnoJPA.findTurnoEntitiesFecha(fecha, estadoTramite);
+    public List<Turno> traerTurnosFechaEstado (LocalDate fecha, Boolean estadoTramite) {
+         return turnoJPA.findTurnoEntitiesFechaEstado(fecha, estadoTramite);
         
 
     }

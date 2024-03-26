@@ -134,7 +134,7 @@ public class TurnoJpaController implements Serializable {
         return findTurnoEntities(true, -1, -1);
     }
 
-    public List<Turno> findTurnoEntitiesFecha(LocalDate fecha, Boolean estadoTramite) {
+    public List<Turno> findTurnoEntitiesFechaEstado(LocalDate fecha, Boolean estadoTramite) {
         return buscarTurnosFechaEstado(fecha, estadoTramite);
     }
 

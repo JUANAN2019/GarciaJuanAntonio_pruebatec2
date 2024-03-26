@@ -36,12 +36,16 @@ public class TurnoSv extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
-        Boolean estadoTramite = Boolean.parseBoolean(request.getParameter("estado"));
         
-        List<Turno> listaTurnos = control.traerTurnosFecha(fecha, estadoTramite);
-        request.setAttribute("turnos", listaTurnos);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        try{
+            LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
+            Boolean estadoTramite = Boolean.parseBoolean(request.getParameter("estado"));
+            List<Turno> listaTurnos = control.traerTurnosFechaEstado(fecha, estadoTramite);
+            request.setAttribute("turnos", listaTurnos);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }catch (TextFormat.ParseException ex){
+            Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 
