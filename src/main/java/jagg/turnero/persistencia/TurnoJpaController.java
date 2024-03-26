@@ -174,7 +174,8 @@ public class TurnoJpaController implements Serializable {
         }
     }
 
-    // Metodo que filtra por fecha y  estados
+    // Metodo que filtra por fecha y  estados dependiendo del valor de estado tramite devuelve una lista contodos los turnos
+    // o con el atendido o  en espera
     private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, Boolean estadoTramite) {
 
         List<Turno> listaTurnos = findTurnoEntities();
