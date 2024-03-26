@@ -5,10 +5,14 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.List;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Turno implements Serializable {
@@ -17,8 +21,10 @@ public class Turno implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate fecha;
-    private String tramite;
-    private Boolean estadoTramite;
+   
+
+     @OneToOne(mappedBy = "turno")
+     private  Tramite tramite;
 
 
     @ManyToOne
@@ -27,21 +33,10 @@ public class Turno implements Serializable {
     public Turno() {
     }
 
-    public Turno(LocalDate fecha, String tramite, Ciudadano ciudadano) {
+    public Turno(LocalDate fecha, Tramite tramite, Ciudadano ciudadano) {
         this.fecha = fecha;
         this.tramite = tramite;
-        this.estadoTramite = false;
         this.ciudadano = ciudadano;
-        ;
-    }
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public LocalDate getFecha() {
@@ -52,20 +47,12 @@ public class Turno implements Serializable {
         this.fecha = fecha;
     }
 
-    public String getTramite() {
+    public Tramite getTramite() {
         return tramite;
     }
 
-    public void setTramite(String tramite) {
+    public void setTramite(Tramite tramite) {
         this.tramite = tramite;
-    }
-
-    public Boolean isEstadoTramite() {
-        return estadoTramite;
-    }
-
-    public void setEstadoTramite(Boolean estadoTramite) {
-        this.estadoTramite = estadoTramite;
     }
 
     public Ciudadano getCiudadano() {
@@ -76,9 +63,12 @@ public class Turno implements Serializable {
         this.ciudadano = ciudadano;
     }
 
-    @Override
-    public String toString() {
-        return "Turno{" + "id=" + id + ", fecha=" + fecha + ", tramite=" + tramite + ", estadoTramite=" + estadoTramite + ", ciudadano=" + ciudadano + '}';
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     

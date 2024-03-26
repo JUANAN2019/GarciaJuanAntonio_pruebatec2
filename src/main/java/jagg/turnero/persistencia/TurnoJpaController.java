@@ -5,23 +5,17 @@
 package jagg.turnero.persistencia;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import jagg.turnero.logica.Tramite;
 import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Turno;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -29,14 +23,9 @@ import java.util.stream.Collectors;
  */
 public class TurnoJpaController implements Serializable {
 
-    public TurnoJpaController() {
-        emf = Persistence.createEntityManagerFactory("turneroUP");
-    }
-
     public TurnoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -48,12 +37,26 @@ public class TurnoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Tramite tramite = turno.getTramite();
+            if (tramite != null) {
+                tramite = em.getReference(tramite.getClass(), tramite.getTramite());
+                turno.setTramite(tramite);
+            }
             Ciudadano ciudadano = turno.getCiudadano();
             if (ciudadano != null) {
                 ciudadano = em.getReference(ciudadano.getClass(), ciudadano.getId());
                 turno.setCiudadano(ciudadano);
             }
             em.persist(turno);
+            if (tramite != null) {
+                Turno oldTurnoOfTramite = tramite.getTurno();
+                if (oldTurnoOfTramite != null) {
+                    oldTurnoOfTramite.setTramite(null);
+                    oldTurnoOfTramite = em.merge(oldTurnoOfTramite);
+                }
+                tramite.setTurno(turno);
+                tramite = em.merge(tramite);
+            }
             if (ciudadano != null) {
                 ciudadano.getTurnos().add(turno);
                 ciudadano = em.merge(ciudadano);
@@ -72,13 +75,32 @@ public class TurnoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Turno persistentTurno = em.find(Turno.class, turno.getId());
+            Tramite tramiteOld = persistentTurno.getTramite();
+            Tramite tramiteNew = turno.getTramite();
             Ciudadano ciudadanoOld = persistentTurno.getCiudadano();
             Ciudadano ciudadanoNew = turno.getCiudadano();
+            if (tramiteNew != null) {
+                tramiteNew = em.getReference(tramiteNew.getClass(), tramiteNew.getTramite());
+                turno.setTramite(tramiteNew);
+            }
             if (ciudadanoNew != null) {
                 ciudadanoNew = em.getReference(ciudadanoNew.getClass(), ciudadanoNew.getId());
                 turno.setCiudadano(ciudadanoNew);
             }
             turno = em.merge(turno);
+            if (tramiteOld != null && !tramiteOld.equals(tramiteNew)) {
+                tramiteOld.setTurno(null);
+                tramiteOld = em.merge(tramiteOld);
+            }
+            if (tramiteNew != null && !tramiteNew.equals(tramiteOld)) {
+                Turno oldTurnoOfTramite = tramiteNew.getTurno();
+                if (oldTurnoOfTramite != null) {
+                    oldTurnoOfTramite.setTramite(null);
+                    oldTurnoOfTramite = em.merge(oldTurnoOfTramite);
+                }
+                tramiteNew.setTurno(turno);
+                tramiteNew = em.merge(tramiteNew);
+            }
             if (ciudadanoOld != null && !ciudadanoOld.equals(ciudadanoNew)) {
                 ciudadanoOld.getTurnos().remove(turno);
                 ciudadanoOld = em.merge(ciudadanoOld);
@@ -116,6 +138,11 @@ public class TurnoJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The turno with id " + id + " no longer exists.", enfe);
             }
+            Tramite tramite = turno.getTramite();
+            if (tramite != null) {
+                tramite.setTurno(null);
+                tramite = em.merge(tramite);
+            }
             Ciudadano ciudadano = turno.getCiudadano();
             if (ciudadano != null) {
                 ciudadano.getTurnos().remove(turno);
@@ -132,10 +159,6 @@ public class TurnoJpaController implements Serializable {
 
     public List<Turno> findTurnoEntities() {
         return findTurnoEntities(true, -1, -1);
-    }
-
-    public List<Turno> findTurnoEntitiesFechaEstado(LocalDate fecha, Boolean estadoTramite) {
-        return buscarTurnosFechaEstado(fecha, estadoTramite);
     }
 
     public List<Turno> findTurnoEntities(int maxResults, int firstResult) {
@@ -158,39 +181,6 @@ public class TurnoJpaController implements Serializable {
         }
     }
 
-    private List<Turno> findTurnoEntities(boolean all, int maxResults, int firstResult, LocalDate fecha) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Turno.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    // Metodo que filtra por fecha y  estados dependiendo del valor de estado tramite devuelve una lista contodos los turnos
-    // o con el atendido o  en espera
-    private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, Boolean estadoTramite) {
-
-        List<Turno> listaTurnos = findTurnoEntities();
-        List<Turno> turnosFecha = listaTurnos.stream()
-                .filter(t -> t.getFecha().equals(fecha))
-                .sorted(Comparator.comparing(Turno::isEstadoTramite)) 
-                .collect(Collectors.toList());
-        //Filtra por fecha
-        List<Turno> turnosTramite = turnosFecha.stream()
-                .filter(t -> t.isEstadoTramite() == estadoTramite)
-                .collect(Collectors.toList());
-        return estadoTramite == null ?  turnosFecha:  turnosTramite;
-    }
-    
-  
     public Turno findTurno(long id) {
         EntityManager em = getEntityManager();
         try {
@@ -212,5 +202,5 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
-
+    
 }

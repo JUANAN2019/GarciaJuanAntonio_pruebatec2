@@ -5,21 +5,23 @@
 package jagg.turnero.persistencia;
 
 import jagg.turnero.logica.Ciudadano;
-import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.*;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import jagg.turnero.logica.Turno;
+import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
  * @author JUNAN
  */
 public class CiudadanoJpaController implements Serializable {
-    public CiudadanoJpaController(){
-        emf = Persistence.createEntityManagerFactory("turneroUP");
-    }
 
     public CiudadanoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -31,11 +33,29 @@ public class CiudadanoJpaController implements Serializable {
     }
 
     public void create(Ciudadano ciudadano) {
+        if (ciudadano.getTurnos() == null) {
+            ciudadano.setTurnos(new ArrayList<Turno>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            List<Turno> attachedTurnos = new ArrayList<Turno>();
+            for (Turno turnosTurnoToAttach : ciudadano.getTurnos()) {
+                turnosTurnoToAttach = em.getReference(turnosTurnoToAttach.getClass(), turnosTurnoToAttach.getId());
+                attachedTurnos.add(turnosTurnoToAttach);
+            }
+            ciudadano.setTurnos(attachedTurnos);
             em.persist(ciudadano);
+            for (Turno turnosTurno : ciudadano.getTurnos()) {
+                Ciudadano oldCiudadanoOfTurnosTurno = turnosTurno.getCiudadano();
+                turnosTurno.setCiudadano(ciudadano);
+                turnosTurno = em.merge(turnosTurno);
+                if (oldCiudadanoOfTurnosTurno != null) {
+                    oldCiudadanoOfTurnosTurno.getTurnos().remove(turnosTurno);
+                    oldCiudadanoOfTurnosTurno = em.merge(oldCiudadanoOfTurnosTurno);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -49,7 +69,34 @@ public class CiudadanoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Ciudadano persistentCiudadano = em.find(Ciudadano.class, ciudadano.getId());
+            List<Turno> turnosOld = persistentCiudadano.getTurnos();
+            List<Turno> turnosNew = ciudadano.getTurnos();
+            List<Turno> attachedTurnosNew = new ArrayList<Turno>();
+            for (Turno turnosNewTurnoToAttach : turnosNew) {
+                turnosNewTurnoToAttach = em.getReference(turnosNewTurnoToAttach.getClass(), turnosNewTurnoToAttach.getId());
+                attachedTurnosNew.add(turnosNewTurnoToAttach);
+            }
+            turnosNew = attachedTurnosNew;
+            ciudadano.setTurnos(turnosNew);
             ciudadano = em.merge(ciudadano);
+            for (Turno turnosOldTurno : turnosOld) {
+                if (!turnosNew.contains(turnosOldTurno)) {
+                    turnosOldTurno.setCiudadano(null);
+                    turnosOldTurno = em.merge(turnosOldTurno);
+                }
+            }
+            for (Turno turnosNewTurno : turnosNew) {
+                if (!turnosOld.contains(turnosNewTurno)) {
+                    Ciudadano oldCiudadanoOfTurnosNewTurno = turnosNewTurno.getCiudadano();
+                    turnosNewTurno.setCiudadano(ciudadano);
+                    turnosNewTurno = em.merge(turnosNewTurno);
+                    if (oldCiudadanoOfTurnosNewTurno != null && !oldCiudadanoOfTurnosNewTurno.equals(ciudadano)) {
+                        oldCiudadanoOfTurnosNewTurno.getTurnos().remove(turnosNewTurno);
+                        oldCiudadanoOfTurnosNewTurno = em.merge(oldCiudadanoOfTurnosNewTurno);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -78,6 +125,11 @@ public class CiudadanoJpaController implements Serializable {
                 ciudadano.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The ciudadano with id " + id + " no longer exists.", enfe);
+            }
+            List<Turno> turnos = ciudadano.getTurnos();
+            for (Turno turnosTurno : turnos) {
+                turnosTurno.setCiudadano(null);
+                turnosTurno = em.merge(turnosTurno);
             }
             em.remove(ciudadano);
             em.getTransaction().commit();
