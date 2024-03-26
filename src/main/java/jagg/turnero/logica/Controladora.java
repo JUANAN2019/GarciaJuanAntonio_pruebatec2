@@ -23,12 +23,14 @@ public class Controladora  {
     public void eliminarTurno (Long id) {
             controlPersis.eliminarTurno(id);
     }
-
+    public Turno traerTurno(long id){
+        return controlPersis.traerTurno(id);
+    }
     public List<Turno> traerTurnos () {
         return controlPersis.traerTurnos();
     }
-    public List<Turno> traerTurnosFecha (LocalDate fecha) {
-        return controlPersis.traerTurnosFecha(fecha);
+    public List<Turno> traerTurnosFecha (LocalDate fecha, Boolean estadoTramite) {
+        return controlPersis.traerTurnosFecha(fecha, estadoTramite);
     }
 
     public void editarTurno (Turno turno) {

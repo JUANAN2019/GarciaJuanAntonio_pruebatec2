@@ -76,5 +76,10 @@ public class Turno implements Serializable {
         this.ciudadano = ciudadano;
     }
 
+    @Override
+    public String toString() {
+        return "Turno{" + "id=" + id + ", fecha=" + fecha + ", tramite=" + tramite + ", estadoTramite=" + estadoTramite + ", ciudadano=" + ciudadano + '}';
+    }
+
     
 }

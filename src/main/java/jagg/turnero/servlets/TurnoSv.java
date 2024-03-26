@@ -1,14 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package jagg.turnero.servlets;
 
 import com.google.protobuf.TextFormat;
 import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Controladora;
 import jagg.turnero.logica.Turno;
-import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,8 +37,9 @@ public class TurnoSv extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
-        System.out.println("soy la fecha "+fecha);
-        List<Turno> listaTurnos = control.traerTurnosFecha(fecha);
+        Boolean estadoTramite = Boolean.parseBoolean(request.getParameter("estado"));
+        
+        List<Turno> listaTurnos = control.traerTurnosFecha(fecha, estadoTramite);
         request.setAttribute("turnos", listaTurnos);
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }

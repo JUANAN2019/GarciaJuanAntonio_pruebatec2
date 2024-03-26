@@ -134,8 +134,8 @@ public class TurnoJpaController implements Serializable {
         return findTurnoEntities(true, -1, -1);
     }
 
-    public List<Turno> findTurnoEntitiesFecha(LocalDate fecha) {
-        return buscarTurnosFecha(fecha);
+    public List<Turno> findTurnoEntitiesFecha(LocalDate fecha, Boolean estadoTramite) {
+        return buscarTurnosFechaEstado(fecha, estadoTramite);
     }
 
     public List<Turno> findTurnoEntities(int maxResults, int firstResult) {
@@ -175,13 +175,12 @@ public class TurnoJpaController implements Serializable {
     }
 
     // Metodo que filtra por fecha y ordenando por estados
-    private List<Turno> buscarTurnosFecha(LocalDate fecha) {
+    private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, Boolean estadoTramite) {
 
         List<Turno> listaTurnos = findTurnoEntities();
         //Filtra por fecha
         List<Turno> turnosPorFecha = listaTurnos.stream()
-                .filter(t -> t.getFecha().equals(fecha))
-                .sorted(Comparator.comparing(Turno::isEstadoTramite))
+                .filter(t -> t.getFecha().equals(fecha) && t.isEstadoTramite() == estadoTramite)
                 .collect(Collectors.toList());
         return turnosPorFecha;
 

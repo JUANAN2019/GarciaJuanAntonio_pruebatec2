@@ -25,12 +25,14 @@ public class ControladoraPersistencia {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    public Turno traerTurno(long id){
+        return turnoJPA.findTurno(id);
+    }
     public List<Turno> traerTurnos () {
         return turnoJPA.findTurnoEntities();
     }
-    public List<Turno> traerTurnosFecha (LocalDate fecha) {
-         return turnoJPA.findTurnoEntitiesFecha(fecha);
+    public List<Turno> traerTurnosFecha (LocalDate fecha, Boolean estadoTramite) {
+         return turnoJPA.findTurnoEntitiesFecha(fecha, estadoTramite);
         
 
     }
