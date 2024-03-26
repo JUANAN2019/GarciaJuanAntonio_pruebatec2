@@ -174,15 +174,15 @@ public class TurnoJpaController implements Serializable {
         }
     }
 
-    // Metodo que filtra por fecha y ordenando por estados
+    // Metodo que filtra por fecha y  estados
     private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, Boolean estadoTramite) {
 
         List<Turno> listaTurnos = findTurnoEntities();
         //Filtra por fecha
-        List<Turno> turnosPorFecha = listaTurnos.stream()
+        List<Turno> turnosFiltrados = listaTurnos.stream()
                 .filter(t -> t.getFecha().equals(fecha) && t.isEstadoTramite() == estadoTramite)
                 .collect(Collectors.toList());
-        return turnosPorFecha;
+        return turnosFiltrados;
 
     }
     

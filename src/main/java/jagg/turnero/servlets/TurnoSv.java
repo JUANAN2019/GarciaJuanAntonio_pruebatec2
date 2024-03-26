@@ -2,13 +2,9 @@
 package jagg.turnero.servlets;
 
 import com.google.protobuf.TextFormat;
-import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Controladora;
 import jagg.turnero.logica.Turno;
-
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,10 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author JUNAN
- */
+
 @WebServlet(name = "TurnoSv", urlPatterns = {"/TurnoSv"})
 public class TurnoSv extends HttpServlet {
 

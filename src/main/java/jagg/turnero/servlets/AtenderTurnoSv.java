@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package jagg.turnero.servlets;
 
 import com.google.protobuf.TextFormat;
@@ -17,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author JUNAN
+ *Servlet para atender los turnos que estan en espera se hace por POST y cambiar el estado en BBDD
+ * 
  */
 @WebServlet(name = "AtenderTurnoSv", urlPatterns = {"/AtenderTurnoSv"})
 public class AtenderTurnoSv extends HttpServlet {
@@ -39,8 +35,6 @@ public class AtenderTurnoSv extends HttpServlet {
             Turno turnoEdit = control.traerTurno(Long.parseLong(id));
             turnoEdit.setEstadoTramite(true);
             control.editarTurno(turnoEdit);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (TextFormat.ParseException ex) {
             Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
