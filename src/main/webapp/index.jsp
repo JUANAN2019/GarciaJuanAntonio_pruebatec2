@@ -86,6 +86,7 @@
                                         <option value="">Seleccione estado turno</option>
                                         <option value="false">En espera</option>
                                         <option value="true">Atendido</option>
+                                        <option value="">Todos</option>
                                         
                                     </select>
                                 </div>

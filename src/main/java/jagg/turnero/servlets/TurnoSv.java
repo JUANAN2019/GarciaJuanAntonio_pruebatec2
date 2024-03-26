@@ -15,54 +15,51 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-@WebServlet(name = "TurnoSv", urlPatterns = {"/TurnoSv"})
+@WebServlet(name = "TurnoSv", urlPatterns = { "/TurnoSv" })
 public class TurnoSv extends HttpServlet {
 
     Controladora control = new Controladora();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        try{
-            LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
-            Boolean estadoTramite = Boolean.parseBoolean(request.getParameter("estado"));
-            List<Turno> listaTurnos = control.traerTurnosFechaEstado(fecha, estadoTramite);
-            request.setAttribute("turnos", listaTurnos);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        }catch (TextFormat.ParseException ex){
-            Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        String estadoStr = request.getParameter("estado");
+        LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
 
+        // Check if estadoStr is empty and assign null to estadoTramite if so
+        Boolean estadoTramite = estadoStr == null || estadoStr.isEmpty() ? null : Boolean.parseBoolean(estadoStr);
+
+        List<Turno> listaTurnos = control.traerTurnosFechaEstado(fecha, estadoTramite);
+        request.setAttribute("turnos", listaTurnos);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+     
+
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        
         LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
         String tramite = request.getParameter("tramite");
-        String  id = request.getParameter("id");
-        try{
+        String id = request.getParameter("id");
+        try {
             Turno turno = new Turno();
             turno.setFecha(fecha);
             turno.setTramite(tramite);
             control.crearTurno(turno, Long.parseLong(id));
 
-            request.getRequestDispatcher("index.jsp").forward(request,response);
-        }catch (TextFormat.ParseException ex){
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        } catch (TextFormat.ParseException ex) {
             Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-
 
     @Override
     public String getServletInfo() {

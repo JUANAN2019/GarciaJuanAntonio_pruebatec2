@@ -18,7 +18,7 @@ public class Turno implements Serializable {
     private long id;
     private LocalDate fecha;
     private String tramite;
-    private boolean estadoTramite;
+    private Boolean estadoTramite;
 
 
     @ManyToOne
@@ -60,11 +60,11 @@ public class Turno implements Serializable {
         this.tramite = tramite;
     }
 
-    public boolean isEstadoTramite() {
+    public Boolean isEstadoTramite() {
         return estadoTramite;
     }
 
-    public void setEstadoTramite(boolean estadoTramite) {
+    public void setEstadoTramite(Boolean estadoTramite) {
         this.estadoTramite = estadoTramite;
     }
 
