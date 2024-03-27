@@ -8,6 +8,7 @@ import jagg.turnero.logica.Tramite;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jagg.turnero.logica.Turno;
@@ -21,7 +22,9 @@ import javax.persistence.EntityManagerFactory;
  * @author JUNAN
  */
 public class TramiteJpaController implements Serializable {
-
+    public TramiteJpaController(){
+        emf = Persistence.createEntityManagerFactory("turneroTresUP");
+    }
     public TramiteJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -38,6 +41,7 @@ public class TramiteJpaController implements Serializable {
             em.getTransaction().begin();
             Turno turno = tramite.getTurno();
             if (turno != null) {
+                
                 turno = em.getReference(turno.getClass(), turno.getId());
                 tramite.setTurno(turno);
             }

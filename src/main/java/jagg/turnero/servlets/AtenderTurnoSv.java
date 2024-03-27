@@ -30,15 +30,15 @@ public class AtenderTurnoSv extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("idAtender");
-        try {
-            Turno turnoEdit = control.traerTurno(Long.parseLong(id));
-            turnoEdit.setEstadoTramite(true);
-            control.editarTurno(turnoEdit);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        } catch (TextFormat.ParseException ex) {
-            Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // String id = request.getParameter("idAtender");
+        // try {
+        //     Turno turnoEdit = control.traerTurno(Long.parseLong(id));
+        //     turnoEdit.setEstadoTramite(true);
+        //     control.editarTurno(turnoEdit);
+        //     request.getRequestDispatcher("index.jsp").forward(request, response);
+        // } catch (TextFormat.ParseException ex) {
+        //     Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+        // }
 
     }
 

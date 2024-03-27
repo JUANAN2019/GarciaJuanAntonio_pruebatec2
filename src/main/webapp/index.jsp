@@ -43,6 +43,21 @@
 
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </form>
+                            <h2>Crear tramite</h2>
+                            <form action="TramiteSv" method="POST">
+                                <div class="form-group">
+                                    <label for="tramite">Nombre tramite:</label>
+                                    <input type="text" class="form-control" id="tramite" name="tramite">
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Crear Tramite</button>
+                                </div>
+
+                            </form>
+
+                            <br>
+                            <br>
 
                             <br>
                             <h2>Sacar turno</h2>
@@ -99,7 +114,7 @@
                             <br>
                             <br>
                             <!-- Resultados en tabla -->
-                            <div class="results-table">
+                            <!-- <div class="results-table">
                                 <% if (request.getAttribute("turnos") !=null) { %>
                                     <h3>Turnos</h3>
                                     <table class="table">
@@ -116,33 +131,12 @@
                                         </thead>
                                         <tbody>
                                             <% for (Turno turno : (List<Turno>) request.getAttribute("turnos")) {%>
-                                                <tr>
-                                                    <td>
-                                                        <%= turno.getId()%>
-                                                    </td>
-                                                    <td>
-                                                        <%= turno.getFecha()%>
-                                                    </td>
-                                                    <td>
-                                                        <%= turno.getCiudadano().getNombre()%>
-                                                    </td>
-                                                    <td>
-                                                        <%= turno.getCiudadano().getId()%>
-                                                    </td>
-                                                    <td>
-                                                        <%= turno.getTramite()%>
-                                                    </td>
-                                                    <td>
-                                                        <%= turno.isEstadoTramite() ? "Atendido" : "En espera" %>
-                                                    </td>
-                                                    
-
-                                                </tr>
+                                                
                                                 <% } %>
                                         </tbody>
                                     </table>
                                     <% }%>
-                            </div>
+                            </div> -->
 
                             <br><br>
                             <h2>Atender Turno</h2>

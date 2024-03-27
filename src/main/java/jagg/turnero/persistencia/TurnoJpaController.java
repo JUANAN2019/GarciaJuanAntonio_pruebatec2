@@ -5,15 +5,22 @@
 package jagg.turnero.persistencia;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jagg.turnero.logica.Tramite;
 import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Turno;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
+
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -22,6 +29,10 @@ import javax.persistence.EntityManagerFactory;
  * @author JUNAN
  */
 public class TurnoJpaController implements Serializable {
+
+     public TurnoJpaController() {
+        emf = Persistence.createEntityManagerFactory("turneroTresUP");
+    }
 
     public TurnoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -180,6 +191,19 @@ public class TurnoJpaController implements Serializable {
             em.close();
         }
     }
+    // private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, Boolean estadoTramite) {
+
+    //     List<Turno> listaTurnos = findTurnoEntities();
+    //     List<Turno> turnosFecha = listaTurnos.stream()
+    //             .filter(t -> t.getFecha().equals(fecha))
+    //             .sorted(Comparator.comparing(Turno::isEstadoTramite)) 
+    //             .collect(Collectors.toList());
+    //     //Filtra por fecha
+    //     List<Turno> turnosTramite = turnosFecha.stream()
+    //             .filter(t -> t.isEstadoTramite() == estadoTramite)
+    //             .collect(Collectors.toList());
+    //     return estadoTramite == null ?  turnosFecha:  turnosTramite;
+    // }
 
     public Turno findTurno(long id) {
         EntityManager em = getEntityManager();

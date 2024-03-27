@@ -22,10 +22,10 @@ public class Tramite implements Serializable {
     public Tramite() {
     }
 
-    public Tramite(String tramite, Boolean tramiteEstado, Turno turno) {
+    public Tramite(String tramite) {
         this.tramite = tramite;
-        this.tramiteEstado = tramiteEstado;
-        this.turno = turno;
+        this.tramiteEstado = false;
+        
     }
 
     public String getTramite() {

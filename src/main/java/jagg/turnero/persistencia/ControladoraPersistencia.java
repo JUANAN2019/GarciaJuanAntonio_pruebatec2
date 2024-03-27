@@ -1,6 +1,7 @@
 package jagg.turnero.persistencia;
 
 import jagg.turnero.logica.Turno;
+import jagg.turnero.logica.Tramite;
 import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.persistencia.exceptions.NonexistentEntityException;
 
@@ -13,6 +14,7 @@ public class ControladoraPersistencia {
 
     TurnoJpaController turnoJPA = new TurnoJpaController();
     CiudadanoJpaController ciudadanoJPA = new CiudadanoJpaController();
+    TramiteJpaController tramiteJpa = new TramiteJpaController();
 
     public void crearTurno (Turno turno) {
         turnoJPA.create(turno);
@@ -31,11 +33,11 @@ public class ControladoraPersistencia {
     public List<Turno> traerTurnos () {
         return turnoJPA.findTurnoEntities();
     }
-    public List<Turno> traerTurnosFechaEstado (LocalDate fecha, Boolean estadoTramite) {
-         return turnoJPA.findTurnoEntitiesFechaEstado(fecha, estadoTramite);
+    // public List<Turno> traerTurnosFechaEstado (LocalDate fecha, Boolean estadoTramite) {
+    //      return turnoJPA.findTurnoEntitiesFechaEstado(fecha, estadoTramite);
         
 
-    }
+    // }
 
     public void editarTurno (Turno turno) {
         try {
@@ -71,6 +73,11 @@ public class ControladoraPersistencia {
     }
     public Ciudadano obtenerCiudadano(Long id){
         return ciudadanoJPA.findCiudadano(id);
+    }
+
+    public void crearTramite(Tramite tramite) {
+        tramiteJpa.create(tramite);
+        
     }
 
 }

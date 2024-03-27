@@ -8,6 +8,7 @@ import jagg.turnero.logica.Ciudadano;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jagg.turnero.logica.Turno;
@@ -23,6 +24,9 @@ import javax.persistence.EntityManagerFactory;
  */
 public class CiudadanoJpaController implements Serializable {
 
+    public CiudadanoJpaController(){
+        emf = Persistence.createEntityManagerFactory("turneroTresUP");
+    }
     public CiudadanoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
