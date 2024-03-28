@@ -55,7 +55,7 @@ Este proyecto ofrece una solución integral para la gestión de turnos en instit
 
 # Contacto:
 
-* Si deseas ponerte en contacto conmigo, puedes hacerlo a través de linkedin:
+* Si desea  contactar conmigo, puede hacerlo a través de linkedin:
  https://www.linkedin.com/in/juan-agg
 
 
