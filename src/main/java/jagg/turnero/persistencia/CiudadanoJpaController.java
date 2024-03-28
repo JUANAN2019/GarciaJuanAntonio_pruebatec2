@@ -12,10 +12,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-/**
- *
- * @author JUNAN
- */
+
 public class CiudadanoJpaController implements Serializable {
     public CiudadanoJpaController(){
         emf = Persistence.createEntityManagerFactory("turneroUP");

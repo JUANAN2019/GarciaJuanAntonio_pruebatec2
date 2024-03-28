@@ -75,7 +75,4 @@ public class ControladoraPersistencia {
     public Ciudadano obtenerCiudadano(Long id){
         return ciudadanoJPA.findCiudadano(id);
     }
-
-   
-
 }

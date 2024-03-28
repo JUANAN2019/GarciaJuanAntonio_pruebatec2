@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package jagg.turnero.persistencia;
 
 import java.io.Serializable;
@@ -179,15 +175,14 @@ public class TurnoJpaController implements Serializable {
         }
     }
 
-    // Metodo que filtra por fecha y estados dependiendo del valor de estado tramite
-    // devuelve una lista contodos los turnos
-    // o con el atendido o en espera
+    // Metodo: usa buscarTurnosFecha y filtra resultados por estado tramite
     private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, boolean estadoTramite) {
         return buscarTurnosFecha(fecha).stream()
                 .filter(t -> Objects.equals(t.isEstadoTramite(), estadoTramite))
                 .collect(Collectors.toList());
     }
 
+    //Metodo obtiene turnos por fecha y los ordena
     private List<Turno> buscarTurnosFecha(LocalDate fecha) {
         return findTurnoEntities().stream()
                 .filter(t -> t.getFecha().equals(fecha))
