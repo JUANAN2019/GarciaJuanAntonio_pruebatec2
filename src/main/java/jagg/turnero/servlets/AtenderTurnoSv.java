@@ -40,9 +40,9 @@ public class AtenderTurnoSv extends HttpServlet {
                 if (!turnoEdit.isEstadoTramite()) { 
                     turnoEdit.setEstadoTramite(true);
                     control.editarTurno(turnoEdit);
-                    request.setAttribute("mensaje", "El turno con el Id " + id + " habia sido atendido.");
+                    request.setAttribute("mensaje", "El turno con el Id " + id + " ha cambiado su estado a atendido");
                 } else {
-                    request.setAttribute("mensaje", "El turno con el Id " + id + " ya ha sido atendido.");
+                    request.setAttribute("mensaje", "El turno con el Id " + id + " ya  estaba atendido.");
                 }
                 request.getRequestDispatcher("turnos.jsp").forward(request, response);
             } else {
