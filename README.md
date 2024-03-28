@@ -59,9 +59,3 @@ Este proyecto ofrece una solución integral para la gestión de turnos en instit
  https://www.linkedin.com/in/juan-agg
 
 
-      Lenguaje de programación: Java.
-      IDEs: Netbeans 17 e Intellij.
-      Servidor de aplicaciones: Tomcat.
-      Motor de base de datos: MySQL.
-      Proveedor JPA: Eclipse Link.
-      Herramientas: Git para control de versiones y Maven para la gestión de dependencias.
