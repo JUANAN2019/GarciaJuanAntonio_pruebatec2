@@ -32,12 +32,22 @@ public class TurnoSv extends HttpServlet {
         LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
 
         // Check if estadoStr is empty and assign null to estadoTramite if so
-        Boolean estadoTramite = estadoStr == null || estadoStr.isEmpty() ? null : Boolean.parseBoolean(estadoStr);
+        // Boolean estadoTramite = estadoStr == null || estadoStr.isEmpty() ? null : Boolean.parseBoolean(estadoStr);
+        List<Turno> listaTurnos;
+       if(estadoStr.isEmpty()){
+            listaTurnos = control.traerTurnosFecha(fecha);
+       }else{
+            Boolean estadoTramite = Boolean.parseBoolean(estadoStr);
+            listaTurnos = control.traerTurnosFechaEstado(fecha, estadoTramite);
+       }
+       
 
-        List<Turno> listaTurnos = control.traerTurnosFechaEstado(fecha, estadoTramite);
-        request.setAttribute("turnos", listaTurnos);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
-     
+        try {
+            request.setAttribute("turnos", listaTurnos);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        } catch (TextFormat.ParseException ex) {
+            Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

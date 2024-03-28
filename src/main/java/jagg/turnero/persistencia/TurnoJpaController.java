@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -138,6 +139,10 @@ public class TurnoJpaController implements Serializable {
         return buscarTurnosFechaEstado(fecha, estadoTramite);
     }
 
+    public List<Turno> findTurnoEntitiesFecha(LocalDate fecha) {
+        return buscarTurnosFecha(fecha);
+    }
+
     public List<Turno> findTurnoEntities(int maxResults, int firstResult) {
         return findTurnoEntities(false, maxResults, firstResult);
     }
@@ -174,23 +179,22 @@ public class TurnoJpaController implements Serializable {
         }
     }
 
-    // Metodo que filtra por fecha y  estados dependiendo del valor de estado tramite devuelve una lista contodos los turnos
-    // o con el atendido o  en espera
+    // Metodo que filtra por fecha y estados dependiendo del valor de estado tramite
+    // devuelve una lista contodos los turnos
+    // o con el atendido o en espera
     private List<Turno> buscarTurnosFechaEstado(LocalDate fecha, Boolean estadoTramite) {
-
-        List<Turno> listaTurnos = findTurnoEntities();
-        List<Turno> turnosFecha = listaTurnos.stream()
-                .filter(t -> t.getFecha().equals(fecha))
-                .sorted(Comparator.comparing(Turno::isEstadoTramite)) 
+        return buscarTurnosFecha(fecha).stream()
+                .filter(t -> Objects.equals(t.isEstadoTramite(), estadoTramite))
                 .collect(Collectors.toList());
-        //Filtra por fecha
-        List<Turno> turnosTramite = turnosFecha.stream()
-                .filter(t -> t.isEstadoTramite() == estadoTramite)
-                .collect(Collectors.toList());
-        return estadoTramite == null ?  turnosFecha:  turnosTramite;
     }
-    
-  
+
+    private List<Turno> buscarTurnosFecha(LocalDate fecha) {
+        return findTurnoEntities().stream()
+                .filter(t -> t.getFecha().equals(fecha))
+                .sorted(Comparator.comparing(Turno::isEstadoTramite))
+                .collect(Collectors.toList());
+    }
+
     public Turno findTurno(long id) {
         EntityManager em = getEntityManager();
         try {
