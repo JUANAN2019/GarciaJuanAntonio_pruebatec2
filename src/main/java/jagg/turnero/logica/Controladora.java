@@ -29,7 +29,7 @@ public class Controladora  {
     public List<Turno> traerTurnos () {
         return controlPersis.traerTurnos();
     }
-    public List<Turno> traerTurnosFechaEstado (LocalDate fecha, Boolean estadoTramite) {
+    public List<Turno> traerTurnosFechaEstado (LocalDate fecha, boolean estadoTramite) {
         return controlPersis.traerTurnosFechaEstado(fecha, estadoTramite);
     }
     public List<Turno> traerTurnosFecha (LocalDate fecha) {
