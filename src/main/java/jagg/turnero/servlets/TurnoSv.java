@@ -2,6 +2,8 @@
 package jagg.turnero.servlets;
 
 import com.google.protobuf.TextFormat;
+
+import jagg.turnero.logica.Ciudadano;
 import jagg.turnero.logica.Controladora;
 import jagg.turnero.logica.Turno;
 import java.io.IOException;
@@ -52,24 +54,54 @@ public class TurnoSv extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    // protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    //         throws ServletException, IOException {
 
-        LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
-        String tramite = request.getParameter("tramite");
-        String id = request.getParameter("id");
-        try {
+    //     LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
+    //     String tramite = request.getParameter("tramite");
+    //     Long id = Long.parseLong(request.getParameter("id"));
+    //     Ciudadano ciudadano = control.traerCiudadano(id);
+
+    //     try {
+    //         Turno turno = new Turno();
+    //         turno.setFecha(fecha);
+    //         turno.setTramite(tramite);
+    //         control.crearTurno(turno, Long.parseLong(id));
+
+    //         request.getRequestDispatcher("index.jsp").forward(request, response);
+    //     } catch (TextFormat.ParseException ex) {
+    //         Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+    //     }
+
+    // }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+
+    LocalDate fecha = LocalDate.parse(request.getParameter("fecha"));
+    String tramite = request.getParameter("tramite");
+    //Long id = Long.parseLong(request.getParameter("id"));
+
+    try {
+        Long id = Long.parseLong(request.getParameter("id"));
+        Ciudadano ciudadano = control.traerCiudadano(id);
+
+        if (ciudadano != null) {
             Turno turno = new Turno();
             turno.setFecha(fecha);
             turno.setTramite(tramite);
-            control.crearTurno(turno, Long.parseLong(id));
+            control.crearTurno(turno, id);
 
             request.getRequestDispatcher("index.jsp").forward(request, response);
-        } catch (TextFormat.ParseException ex) {
-            Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            request.setAttribute("error", "error");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-
+    } catch (TextFormat.ParseException ex) {
+        Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        // Cerrar la conexión a la base de datos
     }
+}
 
     @Override
     public String getServletInfo() {

@@ -62,7 +62,9 @@ public class ControladoraPersistencia {
     public List<Ciudadano> traerCiudadanos () {
         return ciudadanoJPA.findCiudadanoEntities();
     }
-
+    public Ciudadano traerCiudadano(long id){
+        return ciudadanoJPA.findCiudadano(id);
+    }
     public void editarCiudadano (Ciudadano ciudadano) {
         try {
             ciudadanoJPA.edit(ciudadano);

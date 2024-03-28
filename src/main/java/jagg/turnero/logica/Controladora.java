@@ -56,6 +56,9 @@ public class Controladora  {
     public List<Ciudadano> traerCiudadanos () {
         return controlPersis.traerCiudadanos();
     }
+    public Ciudadano traerCiudadano(long id){
+        return controlPersis.traerCiudadano(id);
+    }
 
     public void editarCiudadano (Ciudadano ciudadano) {
         try {
