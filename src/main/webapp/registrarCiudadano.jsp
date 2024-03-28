@@ -32,6 +32,10 @@
                         <label for="email">Email:</label>
                         <input type="text" class="form-control" id="email" name="email" required>
                     </div>
+                    <% String mensaje = (String) request.getAttribute("mensaje"); %>
+                    <% if (mensaje !=null) { %>
+                        <h3><%= mensaje %> </h3>
+                        <% } %>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
             </div>

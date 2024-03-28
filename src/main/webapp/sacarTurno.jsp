@@ -29,9 +29,10 @@
             <div class="form-group">
                 <label for="id">Ciudadano ID:</label>
                 <input type="text" class="form-control" id="fecha" name="id" required>
-                <% if (request.getAttribute("error") == "error") { %>
-                <h3>No existe ciudadano con ese ID introduzca otro</h3>
-                <% }%>
+                <% String mensaje = (String) request.getAttribute("mensaje"); %>
+                <% if (mensaje !=null) { %>
+                    <h3><%= mensaje %> </h3>
+                <% } %>
             </div>
 
             <div class="form-group">

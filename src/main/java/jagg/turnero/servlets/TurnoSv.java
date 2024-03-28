@@ -58,13 +58,18 @@ public class TurnoSv extends HttpServlet {
                 turno.setFecha(fecha);
                 turno.setTramite(tramite);
                 control.crearTurno(turno, id);
-
+                request.setAttribute("mensaje", "Ha sacado su turno correctamente");
                 request.getRequestDispatcher("sacarTurno.jsp").forward(request, response);
             } else {
-                request.setAttribute("error", "error");
+                request.setAttribute("mensaje", "No existe un ciudadano con el Id "+id);
                 request.getRequestDispatcher("sacarTurno.jsp").forward(request, response);
             }
-        } catch (TextFormat.ParseException ex) {
+        } catch (NumberFormatException ex) {
+            request.setAttribute("mensaje", "El ID del ciudadano debe ser un número");
+            request.getRequestDispatcher("sacarTurno.jsp").forward(request, response);
+        }catch (TextFormat.ParseException ex) {
+            request.setAttribute("mensaje", "El ID del turno debe ser un número");
+            request.getRequestDispatcher("sacarTurno.jsp.jsp").forward(request, response);
             Logger.getLogger(TurnoSv.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

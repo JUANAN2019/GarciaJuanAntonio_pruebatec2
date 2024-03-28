@@ -78,9 +78,9 @@
                             <label for="idAtender">ID turno:</label>
                             <input type="text" class="form-control" id="idAtender" name="idAtender" required>
                             <% String mensaje = (String) request.getAttribute("mensaje"); %>
-                                <% if (mensaje !=null) { %>
-                                    <h3><%= mensaje %> </h3>
-                                    <% } %>
+                            <% if (mensaje !=null) { %>
+                                 <h3><%= mensaje %> </h3>
+                            <% } %>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Atender</button>

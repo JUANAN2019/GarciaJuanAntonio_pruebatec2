@@ -42,7 +42,9 @@ public class CiudadanoSv extends HttpServlet {
         listaCiudadanos.add(ciudadano);
 
         control.crearCiudadano(ciudadano);
-        response.sendRedirect("registrarCiudadano.jsp");
+        request.setAttribute("mensaje", "Se ha registrado correctamente " );
+        request.getRequestDispatcher("registrarCiudadano.jsp").forward(request, response);
+        
     }
 
     @Override
