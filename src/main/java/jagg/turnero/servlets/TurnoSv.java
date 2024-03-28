@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 //Se recuperan los datos de los turnos, bien sean todos, en espera o atendidos y se envian al front 
+//dependiendo del estado del turno y de la fecha se utiliza un metodo u otro para traerlos
 @WebServlet(name = "TurnoSv", urlPatterns = { "/TurnoSv" })
 public class TurnoSv extends HttpServlet {
 
